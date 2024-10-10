@@ -1,0 +1,157 @@
+{
+  "consumer": {
+    "name": "order_consumer"
+  },
+  "interactions": [
+    {
+      "description": "Retrieving an address ID that does not exist",
+      "providerStates": [
+        {
+          "name": "Address with ID 00000000-0000-0000-0000-000000000000 does not exist"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/address/00000000-0000-0000-0000-000000000000"
+      },
+      "response": {
+        "status": 404
+      }
+    },
+    {
+      "description": "Retrieving an existing address ID",
+      "providerStates": [
+        {
+          "name": "Address with ID 8aed8fad-d554-4af8-abf5-a65830b49a5f exists"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/address/8aed8fad-d554-4af8-abf5-a65830b49a5f"
+      },
+      "response": {
+        "body": {
+          "addressType": "billing",
+          "city": "Nothingville",
+          "country": "United States",
+          "id": "8aed8fad-d554-4af8-abf5-a65830b49a5f",
+          "number": 123,
+          "state": "Tennessee",
+          "street": "Main Street",
+          "zipCode": 54321
+        },
+        "headers": {
+          "Content-Type": "application/json; charset=UTF-8"
+        },
+        "matchingRules": {
+          "body": {
+            "$.addressType": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.city": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.country": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "United States|Canada"
+                }
+              ]
+            },
+            "$.id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+                }
+              ]
+            },
+            "$.number": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$.state": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.street": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.zipCode": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "application/json(;\\s?charset=[\\w\\-]+)?"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "Deleting an address ID",
+      "providerStates": [
+        {
+          "name": "No specific state required"
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "path": "/address/8aed8fad-d554-4af8-abf5-a65830b49a5f"
+      },
+      "response": {
+        "status": 204
+      }
+    }
+  ],
+  "metadata": {
+    "pact-jvm": {
+      "version": "4.6.14"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "address_provider"
+  }
+}
