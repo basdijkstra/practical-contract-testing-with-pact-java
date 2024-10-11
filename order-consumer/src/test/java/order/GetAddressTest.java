@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @ExtendWith(PactConsumerTestExt.class)
 @PactTestFor(providerName = "address_provider", pactVersion = PactSpecVersion.V3)
-public class AddressServiceGetContractTest {
+public class GetAddressTest {
 
     @Pact(provider = "address_provider", consumer = "order_consumer")
     public RequestResponsePact pactForGetExistingAddressId(PactDslWithProvider builder) {

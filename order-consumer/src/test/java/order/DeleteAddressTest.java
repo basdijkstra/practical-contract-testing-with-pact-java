@@ -13,7 +13,7 @@ import java.io.IOException;
 
 @ExtendWith(PactConsumerTestExt.class)
 @PactTestFor(providerName = "address_provider", pactVersion = PactSpecVersion.V3)
-public class AddressServiceDeleteContractTest {
+public class DeleteAddressTest {
 
     @Pact(provider = "address_provider", consumer = "order_consumer")
     public RequestResponsePact pactForDeleteCorrectlyFormattedAddressId(PactDslWithProvider builder) {
