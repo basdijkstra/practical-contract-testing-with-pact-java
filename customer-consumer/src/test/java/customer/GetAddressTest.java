@@ -2,7 +2,6 @@ package customer;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsEqual.equalTo;
 
 import au.com.dius.pact.consumer.MockServer;
 import au.com.dius.pact.consumer.dsl.DslPart;
@@ -13,18 +12,16 @@ import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.PactSpecVersion;
 import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.fluent.Request;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
 
 @ExtendWith(PactConsumerTestExt.class)
 @PactTestFor(providerName = "address_provider", pactVersion = PactSpecVersion.V3)
-public class AddressServiceGetContractTest {
+public class GetAddressTest {
 
     @Pact(provider = "address_provider", consumer = "customer_consumer")
     public RequestResponsePact pactForGetExistingAddressId(PactDslWithProvider builder) {
@@ -44,8 +41,10 @@ public class AddressServiceGetContractTest {
                 .stringType("city", "Nothingville")
         ).build();
 
-        return builder.given(
-                String.format("Address with ID %s exists", AddressId.EXISTING_ADDRESS_ID))
+        Map<String, Object> providerStateParams = Map.of("addressId", AddressId.EXISTING_ADDRESS_ID);
+
+        return builder
+                .given("Address with ID ${addressId} exists", providerStateParams)
                 .uponReceiving("Retrieving an existing address ID")
                 .path(String.format("/address/%s", AddressId.EXISTING_ADDRESS_ID))
                 .method("GET")
@@ -62,6 +61,7 @@ public class AddressServiceGetContractTest {
      *   - specifying that this request should return an HTTP 404
      *   - generating a pact segment from these expectations and returning that
      *   You should use a provider state with the exact name 'Address with ID 00000000-0000-0000-0000-000000000000 does not exist'
+     *     using a parameterized provider state just like we saw in the videos, and just like in the interaction defined above.
      *   The implementation is very similar to the one above, but does not need the body() part as we don't expect
      *   the provider to return a response body in this situation.
      */

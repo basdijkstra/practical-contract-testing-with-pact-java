@@ -12,6 +12,8 @@ import au.com.dius.pact.core.model.annotations.Pact;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import java.util.Map;
 import java.util.UUID;
 
 @ExtendWith(PactConsumerTestExt.class)
@@ -32,8 +34,10 @@ public class GetAddressTest {
                 .stringMatcher("country", "United States|Canada", "United States")
         ).build();
 
-        return builder.given(
-                String.format("Address with ID %s exists", AddressId.EXISTING_ADDRESS_ID))
+        Map<String, Object> providerStateParams = Map.of("addressId", AddressId.EXISTING_ADDRESS_ID);
+
+        return builder
+                .given("Address with ID ${addressId} exists", providerStateParams)
                 .uponReceiving("Retrieving an existing address ID")
                 .path(String.format("/address/%s", AddressId.EXISTING_ADDRESS_ID))
                 .method("GET")
@@ -46,8 +50,10 @@ public class GetAddressTest {
     @Pact(provider = "address_provider", consumer = "order_consumer")
     public RequestResponsePact pactForGetNonExistentAddressId(PactDslWithProvider builder) {
 
-        return builder.given(
-                String.format("Address with ID %s does not exist", AddressId.NON_EXISTING_ADDRESS_ID))
+        Map<String, Object> providerStateParams = Map.of("addressId", AddressId.NON_EXISTING_ADDRESS_ID);
+
+        return builder
+                .given("Address with ID ${addressId} does not exist", providerStateParams)
                 .uponReceiving("Retrieving an address ID that does not exist")
                 .path(String.format("/address/%s", AddressId.NON_EXISTING_ADDRESS_ID))
                 .method("GET")

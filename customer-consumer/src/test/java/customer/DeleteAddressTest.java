@@ -13,13 +13,13 @@ import java.io.IOException;
 
 @ExtendWith(PactConsumerTestExt.class)
 @PactTestFor(providerName = "address_provider", pactVersion = PactSpecVersion.V3)
-public class AddressServiceDeleteContractTest {
+public class DeleteAddressTest {
 
     @Pact(provider = "address_provider", consumer = "customer_consumer")
     public RequestResponsePact pactForDeleteCorrectlyFormattedAddressId(PactDslWithProvider builder) {
 
-        return builder.given(
-                        "No specific state required")
+        return builder
+                .given("No specific state required")
                 .uponReceiving("Deleting a valid address ID")
                 .path(String.format("/address/%s", AddressId.EXISTING_ADDRESS_ID))
                 .method("DELETE")
