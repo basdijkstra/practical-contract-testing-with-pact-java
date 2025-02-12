@@ -71,6 +71,16 @@ public class GetAddressTest {
 //        return null;
 //    }
 
+    /**
+     * TODO: create a third method that returns a RequestResponsePact object containing the expectations
+     *   around provider behaviour for the situation where the address ID provided is not a valid UUID:
+     *   - An example value could be 'strawberry' or 'invalid_uuid'
+     *   - In this situation, the provider should return an HTTP 400 (Bad Request)
+     *   You should use a provider state with the exact name 'Address with ID strawberry does not exist'
+     *     using a parameterized provider state just like we saw in the videos, and just like in the interaction defined above.
+     */
+
+
     @Test
     @PactTestFor(pactMethod = "pactForGetExistingAddressId")
     public void testFor_GET_existingAddressId_shouldYieldExpectedAddressData(MockServer mockServer) {
@@ -94,4 +104,16 @@ public class GetAddressTest {
 //
 //        Assertions.assertThrows(NotFoundException.class, () -> client.getAddress(AddressId.NON_EXISTING_ADDRESS_ID));
 //    }
+
+    /**
+     * TODO: after you have created the method returning a RequestResponsePact for the HTTP 400 situation,
+     *   create a third test method that calls getAddress() on the AddressClient and verify that it throws a
+     *   BadRequestException, very similar to the test for the HTTP 404 situation defined just above.
+     */
+
+    /**
+     * TODO: After you have completed all the exercises, run the tests for the Customer consumer service using 'mvn clean test'.
+     *   Verify that a consumer contract is generated in the target/pacts folder and that this contract
+     *   contains all three interactions we have defined in this class, as well as a fourth interaction for the HTTP DELETE interaction.
+     */
 }
