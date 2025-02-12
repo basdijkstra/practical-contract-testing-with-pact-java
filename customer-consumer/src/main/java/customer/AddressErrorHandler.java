@@ -26,6 +26,9 @@ public class AddressErrorHandler implements ResponseErrorHandler {
             if (httpResponse.getStatusCode() == HttpStatus.NOT_FOUND) {
                 throw new NotFoundException();
             }
+            if (httpResponse.getStatusCode() == HttpStatus.BAD_REQUEST) {
+                throw new BadRequestException();
+            }
         }
     }
 }
