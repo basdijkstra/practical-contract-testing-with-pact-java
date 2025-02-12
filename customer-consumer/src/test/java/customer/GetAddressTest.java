@@ -39,6 +39,9 @@ public class GetAddressTest {
                 .stringType("street", "Main Street")
                 .integerType("number", 123)
                 .stringType("city", "Nothingville")
+                .integerType("zipCode", 54321)
+                .stringType("state", "Tennessee")
+                .stringMatcher("country", "United States|Canada", "United States")
         ).build();
 
         Map<String, Object> providerStateParams = Map.of("addressId", AddressId.EXISTING_ADDRESS_ID);
@@ -65,11 +68,20 @@ public class GetAddressTest {
      *   The implementation is very similar to the one above, but does not need the body() part as we don't expect
      *   the provider to return a response body in this situation.
      */
-//    @Pact(provider = "address_provider", consumer = "customer_consumer")
-//    public RequestResponsePact pactForGetNonExistentAddressId(PactDslWithProvider builder) {
-//
-//        return null;
-//    }
+    @Pact(provider = "address_provider", consumer = "customer_consumer")
+    public RequestResponsePact pactForGetNonExistentAddressId(PactDslWithProvider builder) {
+
+        Map<String, Object> providerStateParams = Map.of("addressId", AddressId.NON_EXISTING_ADDRESS_ID);
+
+        return builder
+                .given("Address with ID ${addressId} does not exist", providerStateParams)
+                .uponReceiving("Retrieving an address ID that does not exist")
+                .path(String.format("/address/%s", AddressId.NON_EXISTING_ADDRESS_ID))
+                .method("GET")
+                .willRespondWith()
+                .status(404)
+                .toPact();
+    }
 
     /**
      * TODO: create a third method that returns a RequestResponsePact object containing the expectations
@@ -79,7 +91,20 @@ public class GetAddressTest {
      *   You should use a provider state with the exact name 'Address with ID strawberry does not exist'
      *     using a parameterized provider state just like we saw in the videos, and just like in the interaction defined above.
      */
+    @Pact(provider = "address_provider", consumer = "customer_consumer")
+    public RequestResponsePact pactForGetInvalidAddressId(PactDslWithProvider builder) {
 
+        Map<String, Object> providerStateParams = Map.of("addressId", AddressId.INVALID_ADDRESS_ID);
+
+        return builder
+                .given("Address ID ${addressId} is invalid", providerStateParams)
+                .uponReceiving("Retrieving an address using an invalid ID")
+                .path(String.format("/address/%s", AddressId.INVALID_ADDRESS_ID))
+                .method("GET")
+                .willRespondWith()
+                .status(400)
+                .toPact();
+    }
 
     @Test
     @PactTestFor(pactMethod = "pactForGetExistingAddressId")
@@ -96,20 +121,28 @@ public class GetAddressTest {
      * TODO: uncomment the test method after completion of the pactForGetNonExistentAddressId()
      *   method to add this interaction to the contract for the customer_consumer
      */
-//    @Test
-//    @PactTestFor(pactMethod = "pactForGetNonExistentAddressId")
-//    public void testFor_GET_nonExistentAddressId_shouldYieldHttp404(MockServer mockServer) {
-//
-//        AddressServiceClient client = new AddressServiceClient(mockServer.getUrl());
-//
-//        Assertions.assertThrows(NotFoundException.class, () -> client.getAddress(AddressId.NON_EXISTING_ADDRESS_ID));
-//    }
+    @Test
+    @PactTestFor(pactMethod = "pactForGetNonExistentAddressId")
+    public void testFor_GET_nonExistentAddressId_shouldYieldHttp404(MockServer mockServer) {
+
+        AddressServiceClient client = new AddressServiceClient(mockServer.getUrl());
+
+        Assertions.assertThrows(NotFoundException.class, () -> client.getAddress(AddressId.NON_EXISTING_ADDRESS_ID));
+    }
 
     /**
      * TODO: after you have created the method returning a RequestResponsePact for the HTTP 400 situation,
      *   create a third test method that calls getAddress() on the AddressClient and verify that it throws a
      *   BadRequestException, very similar to the test for the HTTP 404 situation defined just above.
      */
+    @Test
+    @PactTestFor(pactMethod = "pactForGetInvalidAddressId")
+    public void testFor_GET_invalidAddressId_shouldYieldHttp400(MockServer mockServer) {
+
+        AddressServiceClient client = new AddressServiceClient(mockServer.getUrl());
+
+        Assertions.assertThrows(BadRequestException.class, () -> client.getAddress(AddressId.INVALID_ADDRESS_ID));
+    }
 
     /**
      * TODO: After you have completed all the exercises, run the tests for the Customer consumer service using 'mvn clean test'.
