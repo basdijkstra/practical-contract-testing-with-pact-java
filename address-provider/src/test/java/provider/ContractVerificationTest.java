@@ -15,6 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Map;
+
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Provider("address_provider")
@@ -36,12 +38,16 @@ public class ContractVerificationTest {
         context.verifyInteraction();
     }
 
-    @State("Address with ID 8aed8fad-d554-4af8-abf5-a65830b49a5f exists")
-    public void addressWithIdExists() {
+    @State("Address exists")
+    public void addressWithIdExists(Map<String, Object> params) {
+        String addressId = params.get("addressId").toString();
+        System.out.println("ADDRESS ID: " + addressId);
     }
 
-    @State("Address with ID 00000000-0000-0000-0000-000000000000 does not exist")
-    public void addressWithIdDoesNotExist() {
+    @State("Address does not exist")
+    public void addressWithIdDoesNotExist(Map<String, Object> params) {
+        String addressId = params.get("addressId").toString();
+        System.out.println("ADDRESS ID: " + addressId);
     }
 
     @State("No specific state required")
