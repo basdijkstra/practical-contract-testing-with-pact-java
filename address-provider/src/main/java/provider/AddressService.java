@@ -1,5 +1,6 @@
 package provider;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -9,23 +10,16 @@ import java.util.UUID;
 @Service
 public class AddressService {
 
-    public Address getAddress(String addressId) {
+    @Autowired
+    private AddressRepository addressRepository;
 
-        Address address = new Address();
+    public Address getAddress(UUID addressId) {
 
-        address.setId(UUID.fromString(addressId));
-        address.setAddressType("billing");
-        address.setStreet("Main Street");
-        address.setNumber(123);
-        address.setCity("Nothingville");
-        address.setZipCode(54321);
-        address.setState("Tennessee");
-        address.setCountry("United States");
-
-        return address;
+        return addressRepository.getById(addressId);
     }
 
-    public void deleteAddress(String addressId) {
+    public void deleteAddress(UUID addressId) {
 
+        addressRepository.deleteById(addressId);
     }
 }

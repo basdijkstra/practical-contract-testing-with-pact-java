@@ -12,10 +12,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Map;
+import java.util.UUID;
+
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -26,6 +30,9 @@ public class ContractVerificationTest {
 
     @LocalServerPort
     int port;
+
+    @MockBean
+    private AddressRepository addressRepository;
 
     @BeforeEach
     public void setUp(PactVerificationContext context) {
@@ -41,13 +48,25 @@ public class ContractVerificationTest {
     @State("Address exists")
     public void addressWithIdExists(Map<String, Object> params) {
         String addressId = params.get("addressId").toString();
-        System.out.println("ADDRESS ID: " + addressId);
+
+        Address address = new Address();
+        address.setId(UUID.fromString(addressId));
+        address.setAddressType("billing");
+        address.setStreet("Main Street");
+        address.setNumber(123);
+        address.setCity("San Francisco");
+        address.setZipCode(90210);
+        address.setState("CA");
+        address.setCountry("United States");
+
+        when(addressRepository.getById(UUID.fromString(addressId))).thenReturn(address);
     }
 
     @State("Address does not exist")
     public void addressWithIdDoesNotExist(Map<String, Object> params) {
         String addressId = params.get("addressId").toString();
-        System.out.println("ADDRESS ID: " + addressId);
+
+        when(addressRepository.getById(UUID.fromString(addressId))).thenReturn(null);
     }
 
     @State("No specific state required")
