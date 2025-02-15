@@ -76,8 +76,8 @@ public class GetAddressTest {
      *   around provider behaviour for the situation where the address ID provided is not a valid UUID:
      *   - An example value could be 'strawberry' or 'invalid_uuid'
      *   - In this situation, the provider should return an HTTP 400 (Bad Request)
-     *   You should use a provider state with the exact name 'No specific state required'
-     *     using a parameterized provider state just like we saw in the videos, and just like in the interaction defined above.
+     *   You should use a provider state with the exact name 'No specific state required'.
+     *     In this case, there is no need to use a parameterized provider state.
      */
 
 
