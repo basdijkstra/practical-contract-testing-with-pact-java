@@ -52,9 +52,9 @@ public class ContractVerificationTest {
         Address address = new Address();
         address.setId(UUID.fromString(addressId));
         address.setAddressType("billing");
-        address.setStreet("Main Street");
+        address.setStreet("Rodeo Drive");
         address.setNumber(123);
-        address.setCity("San Francisco");
+        address.setCity("Beverly Hills");
         address.setZipCode(90210);
         address.setState("CA");
         address.setCountry("United States");
