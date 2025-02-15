@@ -44,7 +44,7 @@ public class GetAddressTest {
         Map<String, Object> providerStateParams = Map.of("addressId", AddressId.EXISTING_ADDRESS_ID);
 
         return builder
-                .given("Address with ID ${addressId} exists", providerStateParams)
+                .given("Address exists", providerStateParams)
                 .uponReceiving("Retrieving an existing address ID")
                 .path(String.format("/address/%s", AddressId.EXISTING_ADDRESS_ID))
                 .method("GET")
@@ -60,7 +60,7 @@ public class GetAddressTest {
      *   - specifying that a GET to /address/00000000-0000-0000-0000-000000000000 is to be performed
      *   - specifying that this request should return an HTTP 404
      *   - generating a pact segment from these expectations and returning that
-     *   You should use a provider state with the exact name 'Address with ID 00000000-0000-0000-0000-000000000000 does not exist'
+     *   You should use a provider state with the exact name 'Address does not exist'
      *     using a parameterized provider state just like we saw in the videos, and just like in the interaction defined above.
      *   The implementation is very similar to the one above, but does not need the body() part as we don't expect
      *   the provider to return a response body in this situation.
@@ -76,7 +76,7 @@ public class GetAddressTest {
      *   around provider behaviour for the situation where the address ID provided is not a valid UUID:
      *   - An example value could be 'strawberry' or 'invalid_uuid'
      *   - In this situation, the provider should return an HTTP 400 (Bad Request)
-     *   You should use a provider state with the exact name 'Address with ID strawberry does not exist'
+     *   You should use a provider state with the exact name 'No specific state required'
      *     using a parameterized provider state just like we saw in the videos, and just like in the interaction defined above.
      */
 
