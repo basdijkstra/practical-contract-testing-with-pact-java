@@ -3,6 +3,8 @@ package provider;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 public class AddressController {
 
@@ -13,18 +15,20 @@ public class AddressController {
     }
 
     @GetMapping("/address/{addressId}")
-    public Address getAddress(@PathVariable String addressId) {
+    public Address getAddress(@PathVariable UUID addressId) {
 
-        if(addressId.equalsIgnoreCase("00000000-0000-0000-0000-000000000000")) {
+        Address address = addressService.getAddress(addressId);
+
+        if (address == null) {
             throw new NotFoundException();
         }
 
-        return addressService.getAddress(addressId);
+        return address;
     }
 
     @DeleteMapping("/address/{addressId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void deleteAddress(@PathVariable String addressId) {
+    public void deleteAddress(@PathVariable UUID addressId) {
 
         addressService.deleteAddress(addressId);
     }

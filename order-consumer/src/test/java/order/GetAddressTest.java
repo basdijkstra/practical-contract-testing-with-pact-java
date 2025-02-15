@@ -37,7 +37,7 @@ public class GetAddressTest {
         Map<String, Object> providerStateParams = Map.of("addressId", AddressId.EXISTING_ADDRESS_ID);
 
         return builder
-                .given("Address with ID ${addressId} exists", providerStateParams)
+                .given("Address exists", providerStateParams)
                 .uponReceiving("Retrieving an existing address ID")
                 .path(String.format("/address/%s", AddressId.EXISTING_ADDRESS_ID))
                 .method("GET")
@@ -53,7 +53,7 @@ public class GetAddressTest {
         Map<String, Object> providerStateParams = Map.of("addressId", AddressId.NON_EXISTING_ADDRESS_ID);
 
         return builder
-                .given("Address with ID ${addressId} does not exist", providerStateParams)
+                .given("Address does not exist", providerStateParams)
                 .uponReceiving("Retrieving an address ID that does not exist")
                 .path(String.format("/address/%s", AddressId.NON_EXISTING_ADDRESS_ID))
                 .method("GET")
