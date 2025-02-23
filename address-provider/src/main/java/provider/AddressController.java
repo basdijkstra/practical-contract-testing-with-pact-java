@@ -14,7 +14,7 @@ public class AddressController {
         this.addressService = addressService;
     }
 
-    @GetMapping("/address/{addressId}")
+    @GetMapping(value = "/address/{addressId}", produces = "application/json")
     public Address getAddress(@PathVariable UUID addressId) {
 
         Address address = addressService.getAddress(addressId);
