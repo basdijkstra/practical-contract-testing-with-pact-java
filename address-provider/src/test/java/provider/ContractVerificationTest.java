@@ -60,14 +60,28 @@ public class ContractVerificationTest {
         when(addressRepository.getById(UUID.fromString(addressId))).thenReturn(address);
     }
 
+    /**
+     * TODO: Add a provider state handler method for the provider state 'No specific state required'.
+     *   The method body can be left empty, as we do not need to perform specific setup
+     *   on the provider side for this specific provider state.
+     */
+
+    @State("No specific state required")
+    public void noSpecificStateRequired() {
+    }
+
+    /**
+     * TODO: Add a provider state handler method for the provider state 'Address does not exist'.
+     *   Make sure it takes provider state parameters.
+     *   In the body of the method, extract the 'addressId' value from the provider state parameters.
+     *   Set up the address repository mock so that it returns null when we call the getById() method
+     *   using this address ID as an argument.
+     */
+
     @State("Address does not exist")
     public void addressWithIdDoesNotExist(Map<String, Object> params) {
         String addressId = params.get("addressId").toString();
 
         when(addressRepository.getById(UUID.fromString(addressId))).thenReturn(null);
-    }
-
-    @State("No specific state required")
-    public void noSpecificStateRequired() {
     }
 }
