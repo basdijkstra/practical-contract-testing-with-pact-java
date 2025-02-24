@@ -9,5 +9,5 @@
     <root level="info">
         <appender-ref ref="STDOUT"/>
     </root>
-    <logger name="au.com.dius" level="debug"/>
+    <logger name="au.com.dius" level="info"/>
 </configuration>
