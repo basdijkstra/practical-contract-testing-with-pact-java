@@ -13,6 +13,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
+env:
+  PACT_BROKER_BASE_URL: ${{ secrets.PACT_BROKER_BASE_URL }}
+  PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
+
 jobs:
 
   cdct-with-pact-java:
@@ -39,5 +43,5 @@ jobs:
         with:
           pactfiles: ./order-consumer/target/pacts
           version: 1.0.0-${{ github.sha }}
-          broker_url: ${{ secrets.PACT_BROKER_BASE_URL }}
-          token: ${{ secrets.PACT_BROKER_TOKEN }}
+          broker_url: ${{ env.PACT_BROKER_BASE_URL }}
+          token: ${{ env.PACT_BROKER_TOKEN }}
