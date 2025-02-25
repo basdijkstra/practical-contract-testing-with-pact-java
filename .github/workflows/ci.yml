@@ -47,4 +47,4 @@ jobs:
           token: ${{ env.PACT_BROKER_TOKEN }}
 
       - name: Provider contract verification
-        run: mvn clean "-Dpact.verifier.publishResults=true" "-Dpact.provider.version=1.0.0-${{ github.sha }}" test
+        run: mvn clean "-Dpact.verifier.publishResults=true" "-Dpact.provider.version=1.0.0-address-${{ github.sha }}" test
