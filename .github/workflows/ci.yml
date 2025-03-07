@@ -49,7 +49,7 @@ jobs:
       - name: Provider contract verification
         run: mvn clean "-Dpact.verifier.publishResults=true" "-Dpact.provider.version=1.0.0-address-${{ github.sha }}" test
 
-      - name: can-i-deploy consumer
+      - name: can-i-deploy order_consumer
         uses: pactflow/actions/can-i-deploy@v2
         with:
           application_name: order_consumer
@@ -57,3 +57,18 @@ jobs:
           broker_url: ${{ env.PACT_BROKER_BASE_URL }}
           token: ${{ env.PACT_BROKER_TOKEN }}
           to_environment: staging
+
+      - name: Deploy order_consumer
+        run: echo Deploying... Done!
+
+      - name: Run post-deployment sanity checks for order_consumer
+        run: echo Checking if deployment was successful... All good!
+
+      - name: record-deployment order_consumer
+        uses: pactflow/actions/record-deployment@v2
+        with:
+          application_name: order_consumer
+          version: 1.0.0-order-${{ github.sha }}
+          broker_url: ${{ env.PACT_BROKER_BASE_URL }}
+          token: ${{ env.PACT_BROKER_TOKEN }}
+          environment: staging
