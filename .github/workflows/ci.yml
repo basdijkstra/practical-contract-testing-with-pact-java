@@ -48,3 +48,12 @@ jobs:
 
       - name: Provider contract verification
         run: mvn clean "-Dpact.verifier.publishResults=true" "-Dpact.provider.version=1.0.0-address-${{ github.sha }}" test
+
+      - name: can-i-deploy consumer
+        uses: pactflow/actions/can-i-deploy@v2
+        with:
+          application_name: order_consumer
+          version: 1.0.0-order-${{ github.sha }}
+          broker_url: ${{ env.PACT_BROKER_BASE_URL }}
+          token: ${{ env.PACT_BROKER_TOKEN }}
+          to_environment: staging
