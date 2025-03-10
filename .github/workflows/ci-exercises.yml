@@ -34,8 +34,10 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      # TODO: Uncomment and complete the step that runs the
-      #   contract generation tests for the customer-consumer
+      ##### Exercises for section: Continuous Integration #####
+
+      # TODO: Add a step that runs the contract generation tests
+      #   for the customer-consumer
       # The working directory is ./customer-consumer
       # The command you need to use is the same as you used to
       #   run tests locally: 'mvn clean test'
@@ -44,14 +46,12 @@ jobs:
         working-directory: ./customer-consumer
         run: mvn clean test
 
-      # TODO: Uncomment and complete the step that publishes the
-      # generated contract to the Pact Broker. Use the
-      # pactflow/actions/publish-pact-files@v2 GitHub Action to do so.
-      #
+      # TODO: Add a step that publishes the generated contract to the Pact Broker.
+      # Use the pactflow/actions/publish-pact-files@v2 GitHub Action to do so.
       # The pactfiles are in ./customer-consumer/target/pacts
       # The PACT_BROKER_BASE_URL and PACT_BROKER_TOKEN should be defined as
-      # repository secrets in your repository. See the documentation linked to
-      # in the video transcripts for detailed instructions on how to do that.
+      #   repository secrets in your repository. See the documentation linked to
+      #   in the video transcripts for detailed instructions on how to do that.
 
       - name: Publish customer-consumer contract
         uses: pactflow/actions/publish-pact-files@v2
@@ -61,7 +61,7 @@ jobs:
           broker_url: ${{ env.PACT_BROKER_BASE_URL }}
           token: ${{ env.PACT_BROKER_TOKEN }}
 
-      # TODO: Uncomment and complete the step that run the provider verification tests.
+      # TODO: Add a step that run the provider verification tests.
       # Use the same command you used to run the tests locally.
 
       - name: Provider contract verification
@@ -71,3 +71,40 @@ jobs:
 
       # TODO: check your Pact Broker to see if the contract is published correctly, and
       #   if the contract has been successfully verified by the provider
+
+      ##### Exercises for section: can-i-deploy #####
+
+      # TODO: Add a step that runs can-i-deploy to check if it is safe for the
+      #   current customer_consumer version to be deployed into the staging environment.
+
+      - name: can-i-deploy customer_consumer
+        uses: pactflow/actions/can-i-deploy@v2
+        with:
+          application_name: customer_consumer
+          version: 1.0.0-customer-${{ github.sha }}
+          broker_url: ${{ env.PACT_BROKER_BASE_URL }}
+          token: ${{ env.PACT_BROKER_TOKEN }}
+          to_environment: staging
+
+      - name: Deploy customer_consumer
+        run: echo Deploying... Done!
+
+      - name: Run post-deployment sanity checks for customer_consumer
+        run: echo Checking if deployment was successful... All good!
+
+      # TODO: Add a step that runs record-deployment to let the Pact Broker know that
+      #   the current version of the customer_consumer service has been successfully
+      #   deployed to the staging environment
+
+      - name: record-deployment customer_consumer
+        uses: pactflow/actions/record-deployment@v2
+        with:
+          application_name: customer_consumer
+          version: 1.0.0-customer-${{ github.sha }}
+          broker_url: ${{ env.PACT_BROKER_BASE_URL }}
+          token: ${{ env.PACT_BROKER_TOKEN }}
+          environment: staging
+
+      # TODO: push your changes to your remote repository and check the output of the
+      #   build that was triggered. Also have a look at the Pact Broker to see what
+      #   has happened and if you can see the result of your CI actions.
