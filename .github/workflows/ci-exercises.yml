@@ -71,3 +71,7 @@ jobs:
       # TODO: Add a step that runs record-deployment to let the Pact Broker know that
       #   the current version of the customer_consumer service has been successfully
       #   deployed to the staging environment
+
+      # TODO: push your changes to your remote repository and check the output of the
+      #   build that was triggered. Also have a look at the Pact Broker to see what
+      #   has happened and if you can see the result of your CI actions.
