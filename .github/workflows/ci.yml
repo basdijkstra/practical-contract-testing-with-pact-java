@@ -72,3 +72,27 @@ jobs:
           broker_url: ${{ env.PACT_BROKER_BASE_URL }}
           token: ${{ env.PACT_BROKER_TOKEN }}
           environment: staging
+
+      - name: can-i-deploy address_provider
+        uses: pactflow/actions/can-i-deploy@v2
+        with:
+          application_name: address_provider
+          version: 1.0.0-address-${{ github.sha }}
+          broker_url: ${{ env.PACT_BROKER_BASE_URL }}
+          token: ${{ env.PACT_BROKER_TOKEN }}
+          to_environment: staging
+
+      - name: Deploy address_provider
+        run: echo Deploying... Done!
+
+      - name: Run post-deployment sanity checks for address_provider
+        run: echo Checking if deployment was successful... All good!
+
+      - name: record-deployment address_provider
+        uses: pactflow/actions/record-deployment@v2
+        with:
+          application_name: address_provider
+          version: 1.0.0-address-${{ github.sha }}
+          broker_url: ${{ env.PACT_BROKER_BASE_URL }}
+          token: ${{ env.PACT_BROKER_TOKEN }}
+          environment: staging
