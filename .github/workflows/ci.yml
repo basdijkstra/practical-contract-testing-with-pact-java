@@ -1,8 +1,9 @@
 name: CI examples
 
+# Run this pipeline only when triggered manually
 on:
   workflow_dispatch:
-    
+
 concurrency:
   # For pull requests, cancel all currently-running jobs for this workflow
   # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#concurrency
