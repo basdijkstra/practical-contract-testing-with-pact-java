@@ -1,11 +1,7 @@
 name: CI examples
 
 on:
-  push:
-    branches:
-      - main
-      - answers
-  pull_request:
+  workflow_dispatch:
 
 concurrency:
   # For pull requests, cancel all currently-running jobs for this workflow
