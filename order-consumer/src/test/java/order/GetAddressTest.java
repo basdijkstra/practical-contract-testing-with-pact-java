@@ -48,6 +48,32 @@ public class GetAddressTest {
     }
 
     @Pact(provider = "address_provider", consumer = "order_consumer")
+    public RequestResponsePact pactForGetExistingAddressIdWithPOBox(PactDslWithProvider builder) {
+
+        DslPart body = LambdaDsl.newJsonBody((o) -> o
+                .uuid("id", UUID.fromString(AddressId.PO_BOX_ADDRESS_ID))
+                .stringType("addressType", "billing")
+                .stringType("poBox", "PO Box 1234")
+                .stringType("city", "Nothingville")
+                .integerType("zipCode", 54321)
+                .stringType("state", "Tennessee")
+                .stringMatcher("country", "United States|Canada", "United States")
+        ).build();
+
+        Map<String, Object> providerStateParams = Map.of("addressId", AddressId.PO_BOX_ADDRESS_ID);
+
+        return builder
+                .given("PO Box address exists", providerStateParams)
+                .uponReceiving("Retrieving an existing P.O. Box address ID")
+                .path(String.format("/address/%s", AddressId.PO_BOX_ADDRESS_ID))
+                .method("GET")
+                .willRespondWith()
+                .status(200)
+                .body(body)
+                .toPact();
+    }
+
+    @Pact(provider = "address_provider", consumer = "order_consumer")
     public RequestResponsePact pactForGetNonExistentAddressId(PactDslWithProvider builder) {
 
         Map<String, Object> providerStateParams = Map.of("addressId", AddressId.NON_EXISTING_ADDRESS_ID);
@@ -71,6 +97,17 @@ public class GetAddressTest {
         Address address = client.getAddress(AddressId.EXISTING_ADDRESS_ID);
 
         Assertions.assertEquals(AddressId.EXISTING_ADDRESS_ID, address.getId());
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "pactForGetExistingAddressIdWithPOBox")
+    public void testFor_GET_existingAddressIdWithPOBox_shouldYieldExpectedAddressData(MockServer mockServer) {
+
+        AddressServiceClient client = new AddressServiceClient(mockServer.getUrl());
+
+        Address address = client.getAddress(AddressId.PO_BOX_ADDRESS_ID);
+
+        Assertions.assertEquals(AddressId.PO_BOX_ADDRESS_ID, address.getId());
     }
 
     @Test
