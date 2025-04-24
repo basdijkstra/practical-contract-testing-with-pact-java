@@ -12,7 +12,6 @@ public class PaymentServiceClient {
 
     public PaymentServiceClient(@Value("${payment_provider.base-url}") String baseUrl) {
         this.restTemplate = new RestTemplateBuilder()
-                .errorHandler(new PaymentErrorHandler())
                 .rootUri(baseUrl)
                 .defaultHeader("Connection", "close")
                 .build();

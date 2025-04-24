@@ -39,7 +39,7 @@ public class PaymentServiceClientTest {
     private static WireMockPactApi wireMockPactApi;
 
     @BeforeAll
-    static void configureWiremockPactGenerator() {
+    public static void configureWiremockPactGenerator() {
 
         wireMockServer = new WireMockServer();
 
