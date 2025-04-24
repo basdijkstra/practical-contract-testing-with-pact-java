@@ -24,6 +24,8 @@
     <pact.version>4.6.14</pact.version>
     <pact.consumer.junit5.version>4.0.10</pact.consumer.junit5.version>
     <lombok.version>1.18.34</lombok.version>
+    <wiremock.version>3.6.0</wiremock.version>
+    <wiremock.pact.lib.version>0.6.0</wiremock.pact.lib.version>
   </properties>
 
   <dependencies>
@@ -70,6 +72,20 @@
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>${lombok.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.wiremock</groupId>
+      <artifactId>wiremock</artifactId>
+      <version>${wiremock.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>se.bjurr.wiremockpact</groupId>
+      <artifactId>wiremock-pact-lib</artifactId>
+      <version>${wiremock.pact.lib.version}</version>
+      <scope>test</scope>
     </dependency>
 
   </dependencies>
