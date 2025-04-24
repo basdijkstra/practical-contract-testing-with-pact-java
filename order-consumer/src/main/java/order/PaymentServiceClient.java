@@ -20,8 +20,4 @@ public class PaymentServiceClient {
     public Payment getPaymentForOrder(String orderId) {
         return restTemplate.getForObject(String.format("/payment/%s", orderId), Payment.class);
     }
-
-    public void deletePaymentForOrder(String orderId) {
-        restTemplate.delete(String.format("/payment/%s", orderId));
-    }
 }
