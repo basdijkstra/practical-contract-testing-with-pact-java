@@ -84,4 +84,21 @@ public class ContractVerificationTest {
 
         when(addressRepository.getById(UUID.fromString(addressId))).thenReturn(null);
     }
+
+    @State("PO Box address exists")
+    public void poBoxAddressWithIdExists(Map<String, Object> params) {
+
+        String addressId = params.get("addressId").toString();
+
+        Address address = new Address();
+        address.setId(UUID.fromString(addressId));
+        address.setAddressType("billing");
+        address.setPoBox("PO Box 9876");
+        address.setCity("Schenectady");
+        address.setZipCode(12345);
+        address.setState("NY");
+        address.setCountry("United States");
+
+        when(addressRepository.getById(UUID.fromString(addressId))).thenReturn(address);
+    }
 }
