@@ -105,6 +105,23 @@ public class PaymentServiceClientTest {
      *   HttpClientErrorException with a message '400 Bad Request'.
      */
 
+    @Test
+    public void getPayment_invalidOrderId_shouldThrowException() {
+
+        wireMockServer.stubFor(WireMock.get(WireMock.urlEqualTo("/payment/invalid-order-id"))
+                .willReturn(aResponse().withStatus(400))
+                .withMetadata(new Metadata(
+                        Map.of(
+                                WireMockPactMetadata.METADATA_ATTR,
+                                new WireMockPactMetadata()
+                                        .setProvider("payment_provider")))));
+
+        assertThatThrownBy(
+                () -> new PaymentServiceClient(wireMockServer.baseUrl()).getPaymentForOrder("invalid-order-id")
+        ).isInstanceOf(HttpClientErrorException.class)
+                .hasMessageContaining("400 Bad Request");
+    }
+
 
     @AfterAll
     public static void after() {
