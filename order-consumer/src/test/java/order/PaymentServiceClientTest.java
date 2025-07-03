@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.HttpClientErrorException;
@@ -97,22 +96,15 @@ public class PaymentServiceClientTest {
                 .hasMessageContaining("404 Not Found");
     }
 
-    @Test
-    public void getPayment_invalidOrderId_shouldThrowException() {
+    /**
+     * TODO: Add a third test, one that writes a new interaction to the contract, for an HTTP 400 situation.
+     *   First, define the WireMock stub definition. It is very similar to the one for the HTTP 404 interaction,
+     *   but it should respond to an HTTP GET to '/payment/invalid-order-id' with an HTTP 400.
+     *   Next, call the getPaymentForOrder() method on a new PaymentServiceClient instance (just like above)
+     *   to retrieve the payment details for order 'invalid-order-id' and verify that it throws an
+     *   HttpClientErrorException with a message '400 Bad Request'.
+     */
 
-        wireMockServer.stubFor(WireMock.get(WireMock.urlEqualTo("/payment/this_is_not_a_valid_payment_id"))
-                .willReturn(aResponse().withStatus(400))
-                .withMetadata(new Metadata(
-                        Map.of(
-                                WireMockPactMetadata.METADATA_ATTR,
-                                new WireMockPactMetadata()
-                                        .setProvider("payment_provider")))));
-
-        assertThatThrownBy(
-                () -> new PaymentServiceClient(wireMockServer.baseUrl()).getPaymentForOrder("this_is_not_a_valid_payment_id")
-        ).isInstanceOf(HttpClientErrorException.class)
-                .hasMessageContaining("400 Bad Request");
-    }
 
     @AfterAll
     public static void after() {
